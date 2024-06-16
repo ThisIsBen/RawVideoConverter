@@ -50,6 +50,7 @@ namespace RawVideoConverter
 
                 txtBox_InputDir.Text = previousSettings[1];
                 txtBox_OutputDir.Text = previousSettings[2];
+                monthPicker.SelectedDate = DateTime.Parse(previousSettings[3]);
             }
             
            
@@ -79,7 +80,7 @@ namespace RawVideoConverter
             }
 
             //Save settings to a file
-            string settings = $"{mode}\n{txtBox_InputDir.Text}\n{txtBox_OutputDir.Text}";
+            string settings = $"{mode}\n{txtBox_InputDir.Text}\n{txtBox_OutputDir.Text}\n{monthPicker.DisplayDate.ToString()}";
             FileIO.outputStringsToFile(".previousSettings.txt", settings);
 
 

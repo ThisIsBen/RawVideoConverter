@@ -110,6 +110,10 @@ namespace RawVideoConverter
                 
 
             }
+            if(rawVideo_List.Count==0)
+            {
+                mainWindow.logging($"No raw video detected.");
+            }
 
 
         }

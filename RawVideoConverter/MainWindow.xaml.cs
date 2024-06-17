@@ -34,7 +34,7 @@ namespace RawVideoConverter
         {
 
             //Load in previous settings from a file
-            var previousSettings = FileIO.readAllLinesOfAFile(".previousSettings.txt");
+            var previousSettings = FileIO.readAllLinesOfAFile("previousSettings.txt");
             if (previousSettings != null)
             {
                 if (previousSettings[0] == radBtn_Manual.Content.ToString())
@@ -50,7 +50,8 @@ namespace RawVideoConverter
 
                 txtBox_InputDir.Text = previousSettings[1];
                 txtBox_OutputDir.Text = previousSettings[2];
-                monthPicker.SelectedDate = DateTime.Parse(previousSettings[3]);
+                //monthPicker.SelectedDate = DateTime.Parse(previousSettings[3]);
+                monthPicker.DisplayDate = DateTime.Parse(previousSettings[3]);
             }
             
            
@@ -60,14 +61,25 @@ namespace RawVideoConverter
         }
         
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void startBtn_Click(object sender, RoutedEventArgs e)
         {
+
+            //fool-proof
+            if(txtBox_InputDir.Text.Trim() == "" || txtBox_OutputDir.Text.Trim() == "")
+            {
+                MessageBox.Show("Fields cannot be left empty.");
+                return;
+            }
+
+
+            //Disable the start button until the conversion is finished
+            startBtn.IsEnabled = false;
+
+
             //Extract user input info
             string mode="";
             string radBtn_Manual_Val= radBtn_Manual.Content.ToString();
             string radBtn_Auto_Val = radBtn_Auto.Content.ToString();
-
-            
 
             if (radBtn_Manual.IsChecked == true)
             {
@@ -81,7 +93,7 @@ namespace RawVideoConverter
 
             //Save settings to a file
             string settings = $"{mode}\n{txtBox_InputDir.Text}\n{txtBox_OutputDir.Text}\n{monthPicker.DisplayDate.ToString()}";
-            FileIO.outputStringsToFile(".previousSettings.txt", settings);
+            FileIO.outputStringsToFile("previousSettings.txt", settings);
 
 
             //Create an object of converter and apply user's input info
@@ -91,6 +103,7 @@ namespace RawVideoConverter
             try
             {
                 converterObj.start();
+                ;
             }
             catch(Exception ex)
             {
@@ -122,14 +135,20 @@ namespace RawVideoConverter
            
         }
 
-        private void radBtn_Manual_Checked(object sender, RoutedEventArgs e)
+        private void radBtn_Manual_Clicked(object sender, RoutedEventArgs e)
         {
             radBtn_Auto.IsChecked = false;
+
+            //Enable month picker
+            monthPicker.IsEnabled = true;
         }
 
-        private void radBtn_Auto_Checked(object sender, RoutedEventArgs e)
+        private void radBtn_Auto_Clicked(object sender, RoutedEventArgs e)
         {
             radBtn_Manual.IsChecked = false;
+
+            //Disable month picker
+            monthPicker.IsEnabled = false;
         }
 
 
@@ -221,6 +240,18 @@ namespace RawVideoConverter
             {
                 Mouse.Capture(null);
             }
+        }
+
+        //Enable the start button
+        public void EnableStartBtn()
+        {
+            
+
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                startBtn.IsEnabled = true;
+            }));
+
         }
     }
 }

@@ -115,6 +115,8 @@ namespace RawVideoConverter
                 mainWindow.logging($"No raw video detected.");
             }
 
+            //The conversion has finished, so we enable the start button
+            mainWindow.EnableStartBtn();
 
         }
 
@@ -137,7 +139,7 @@ namespace RawVideoConverter
             //Create channel object
             channelObj = new ChannelProvider();
             //Start N consumers
-            int consumerCount = 1;
+            int consumerCount = 2;
             channelObj.startConsumers(outputDir, consumerCount);
             //Start 1 producer
             producerObj = new ChannelProvider.Producer(channelObj.getWriter());
@@ -202,10 +204,14 @@ namespace RawVideoConverter
                 string outPutVideoDir = $"{outputDir}\\{modification_Date.Year}\\{modification_Date.Month}\\{parentDirName}\\{modification_Date.Day}";
                 Directory.CreateDirectory(outPutVideoDir);
 
+                //For real execution
                 //The video name after conversion
-                string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.mp4";
+                //string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.mp4";
 
-                
+                //For copy .raw to the new folder structure
+                string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.raw";
+
+
 
                 //Convert the .raw video to .mp4 and copy it to the output path
                 string outputVideoPath = $"{outPutVideoDir}\\{outPutVideoName}";
@@ -219,7 +225,7 @@ namespace RawVideoConverter
                 //ffMpeg.ConvertMedia(newOutputDir, $"{outPutVideoName}.mp4", "mp4");
 
                 //Display progress status
-                msg = $"Complete\n";
+                msg = $"Complete\n Waiting for the next raw video to come...\n";
                 mainWindow.logging(msg);
             }
             catch (Exception ex)
@@ -238,10 +244,13 @@ namespace RawVideoConverter
                 File.Delete(outputVideoPath);
             }
 
-
+            //For real execution
             //Run the ffmpeg exe to do the conversion
             //ffmpeg - f rawvideo - pix_fmt yuv420p - s:v 1920x1080 - r 25 - i input.raw - c:v libx264 output.mp4
-            string command = $"ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 25 -i \"{inputVideoPath}\" -c:v libx264 \"{outputVideoPath}\"";
+            //string command = $"ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 25 -i \"{inputVideoPath}\" -c:v libx264 \"{outputVideoPath}\"";
+
+            //For copy .raw to the new folder structure
+            string command = $"copy  \"{inputVideoPath}\"  \"{outputVideoPath}\"";
             ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", "/c " + command);
 
             procStartInfo.RedirectStandardOutput = true;

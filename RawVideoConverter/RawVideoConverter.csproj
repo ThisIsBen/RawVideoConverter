@@ -7,8 +7,4 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
-  </ItemGroup>
-
 </Project>

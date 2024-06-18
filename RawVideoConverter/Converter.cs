@@ -1,4 +1,4 @@
-﻿using NReco.VideoConverter;
+﻿//using NReco.VideoConverter;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,8 +47,8 @@ namespace RawVideoConverter
         private  List<RawVideoItem> rawVideo_List = new List<RawVideoItem>();
 
 
-        //Video converter
-        private static NReco.VideoConverter.FFMpegConverter ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+        //C# package Video converter
+        //private static NReco.VideoConverter.FFMpegConverter ffMpeg = new NReco.VideoConverter.FFMpegConverter();
 
 
 

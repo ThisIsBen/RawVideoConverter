@@ -45,6 +45,8 @@ namespace RawVideoConverter
                 else if (previousSettings[0] == radBtn_Auto.Content.ToString())
                 {
                     radBtn_Auto.IsChecked = true;
+                    //Disable month picker
+                    monthPicker.IsEnabled = false;
 
                 }
 
@@ -59,8 +61,10 @@ namespace RawVideoConverter
 
 
         }
-        
 
+        //The object for using Converter functions
+        private Converter converterObj;
+        //Start button handler
         private void startBtn_Click(object sender, RoutedEventArgs e)
         {
 
@@ -97,7 +101,7 @@ namespace RawVideoConverter
 
 
             //Create an object of converter and apply user's input info
-            Converter converterObj = new Converter(this , mode, monthPicker.DisplayDate, txtBox_InputDir.Text, txtBox_OutputDir.Text, radBtn_Manual_Val, radBtn_Auto_Val);
+            converterObj = new Converter(this , mode, monthPicker.DisplayDate, txtBox_InputDir.Text, txtBox_OutputDir.Text, radBtn_Manual_Val, radBtn_Auto_Val);
 
             //Start converting
             try

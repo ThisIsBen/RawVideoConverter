@@ -87,7 +87,7 @@ namespace RawVideoConverter
 
                         //Process the data received from the queue---------------
                        
-                        Converter.convert2MP4(File.GetLastWriteTime(channelItem), Path.GetDirectoryName(channelItem), channelItem,outputDir);
+                        Converter.convert2MP4(File.GetLastWriteTime(channelItem),Path.GetFileName( Path.GetDirectoryName(channelItem)), channelItem, outputDir);
 
                           
                         

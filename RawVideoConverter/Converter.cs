@@ -156,7 +156,7 @@ namespace RawVideoConverter
 
             watcher.Changed += OnChanged;
             
-            //watcher.Error += OnError;
+            watcher.Error += OnError;
 
             watcher.Filter = "*.raw";
             watcher.IncludeSubdirectories = true;
@@ -169,14 +169,28 @@ namespace RawVideoConverter
 
 
         }
+        private void OnError(object sender, ErrorEventArgs e)
+        {
+            ;
+        }
 
-        //When a newly created .raw video is detected do the following process
+        // LastWrite of a file will be triggered 3 times because there is writing the content, writing the last access time, etc.
+        // As a result, we need to use a hashset to record the triggered files to prevent this.
+        private static HashSet<string> OnChangedFile_Set = new HashSet<string>();
+        // When a newly created .raw video is detected do the following process
         private  void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType != WatcherChangeTypes.Changed)
             {
                 return;
             }
+            //Record the triggered files to prevent handling the OnChange event several times for the same file
+            if(OnChangedFile_Set.Contains(e.Name))
+            {
+                return;
+            } 
+            OnChangedFile_Set.Add(e.Name);
+
             //Announce that a newly created.raw video is detected
             string msg = $"{e.Name} is detected in {Path.GetDirectoryName(e.FullPath)}\n";
             mainWindow.logging(msg);
@@ -231,6 +245,11 @@ namespace RawVideoConverter
             catch (Exception ex)
             {
                 mainWindow.logging($"Error occured: \n{ ex.ToString()}");
+            }
+            finally
+            {
+                //Remove the handled file name from the hashset
+                OnChangedFile_Set.Remove($"{parentDirName}\\{Path.GetFileName(inputVideoPath)}");
             }
         }
 

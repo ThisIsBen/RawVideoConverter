@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RawVideoConverter"
         mc:Ignorable="d"
-        Title="VideoDirConverter      此程式為宏昇營造股份有限公司所有，非經正式授權，請勿使用。" Height="523" Width="650">
-    <StackPanel Orientation="Vertical" Margin="10,0,23,0">
-        <Grid Height="493" Width="602">
+        Title="VideoDirConverter      此程式為宏昇營造股份有限公司所有，非經正式授權，請勿使用。" Height="553" Width="650">
+    <StackPanel Orientation="Vertical" Margin="10,0,23,-27">
+        <Grid Height="503" Width="602">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="49*"/>
                 <ColumnDefinition Width="473*"/>
@@ -18,24 +18,31 @@
                 <RowDefinition Height="187*"/>
                 <RowDefinition Height="215*"/>
             </Grid.RowDefinitions>
-            <Label x:Name="label4" Content="Select conversion mode:" HorizontalAlignment="Left" Margin="22,25,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="26" Width="139"/>
-            <RadioButton x:Name="radBtn_Manual" Content="Manual Mode" HorizontalAlignment="Left" Margin="22,51,0,0" VerticalAlignment="Top" Click="radBtn_Manual_Clicked"  IsChecked="True" Grid.ColumnSpan="2" Height="15" Width="93" />
-            <RadioButton x:Name="radBtn_Auto" Content="Auto Mode" HorizontalAlignment="Left" Margin="102,51,0,0" VerticalAlignment="Top" Click="radBtn_Auto_Clicked" Grid.Column="1" Height="15" Width="79"/>
+            <Label x:Name="label4" Content="-Select conversion mode:" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="26" Width="153"/>
 
-            <Label x:Name="label" Content="Input Folder (Enter by Drag and Drop):" HorizontalAlignment="Left" Margin="22,84,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="26" Width="213"/>
-            <TextBox x:Name="txtBox_InputDir" HorizontalAlignment="Left" Margin="24,110,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="568" Drop="txtBox_InputDir_Drop" Height="28" PreviewDragOver="txtBox_InputDir_PreviewDragOver" Grid.ColumnSpan="2" FontSize="16"/>
+            <RadioButton x:Name="radBtn_Manual" Content="Manual Mode" HorizontalAlignment="Left" Margin="31,40,0,0" VerticalAlignment="Top" Click="radBtn_Manual_Clicked"  IsChecked="True" Grid.ColumnSpan="2" Height="15" Width="93" />
+            <RadioButton x:Name="radBtn_Auto" Content="Auto Mode" HorizontalAlignment="Left" Margin="102,40,0,0" VerticalAlignment="Top" Click="radBtn_Auto_Clicked" Grid.Column="1" Height="15" Width="79"/>
 
-            <Label x:Name="label1" Content="Target Month:" HorizontalAlignment="Left" Margin="25,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.734,-0.742" Grid.ColumnSpan="2" Height="26" Width="84"/>
-            <Calendar x:Name="monthPicker" DisplayMode="Year" HorizontalAlignment="Left" Margin="26,169,0,0" VerticalAlignment="Top" Grid.RowSpan="2" DisplayModeChanged="monthPicker_DisplayModeChanged" PreviewMouseUp="monthPicker_PreviewMouseUp" Grid.ColumnSpan="2" Height="168" Width="179"/>
 
-            <Label x:Name="label2" Content="Output Folder (Enter by Drag and Drop):" HorizontalAlignment="Left" Margin="22,132,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.124,0.183" Grid.Row="1" Grid.ColumnSpan="2" Height="26" Width="223"/>
+            <Label x:Name="labelExt" Content="-Enter the target files' extension (For example, mp4):" HorizontalAlignment="Left" Margin="22,69,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="26" Width="293"/>
+            <TextBox x:Name="txtBox_TargetExt" Grid.Column="1" HorizontalAlignment="Left" Margin="258,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" FontSize="16" Height="28" />
+
+
+
+            <Label x:Name="label" Content="-Input Folder (Enter by Drag and Drop):" HorizontalAlignment="Left" Margin="24,99,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="26" Width="229"/>
+            <TextBox x:Name="txtBox_InputDir" HorizontalAlignment="Left" Margin="26,125,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="568" Drop="txtBox_InputDir_Drop" Height="28" PreviewDragOver="txtBox_InputDir_PreviewDragOver" Grid.ColumnSpan="2" FontSize="16"/>
+
+            <Label x:Name="label1" Content="-Select Target Month:" HorizontalAlignment="Left" Margin="24,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.734,-0.742" Grid.ColumnSpan="2" Height="26" Width="127"/>
+            <Calendar x:Name="monthPicker" DisplayMode="Year" HorizontalAlignment="Left" Margin="26,188,0,0" VerticalAlignment="Top" Grid.RowSpan="2" DisplayModeChanged="monthPicker_DisplayModeChanged" PreviewMouseUp="monthPicker_PreviewMouseUp" Grid.ColumnSpan="2" Height="168" Width="179"/>
+
+            <Label x:Name="label2" Content="-Output Folder (Enter by Drag and Drop):" HorizontalAlignment="Left" Margin="22,132,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.124,0.183" Grid.Row="1" Grid.ColumnSpan="2" Height="26" Width="241"/>
             <TextBox x:Name="txtBox_OutputDir" HorizontalAlignment="Left" Margin="28,158,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="564" Grid.Row="1" Drop="txtBox_OutputDir_Drop" Height="27" PreviewDragOver="txtBox_OutputDir_PreviewDragOver" Grid.ColumnSpan="2" FontSize="16"/>
 
 
-            <Label x:Name="label3" Content="Progress:" HorizontalAlignment="Left" Margin="191,138,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.353,0.329" Height="26" Grid.Column="1" Width="58"/>
-            <TextBox x:Name="txtBox_Status" HorizontalAlignment="Left" Margin="191,171,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="344" Drop="txtBox_OutputDir_Drop" Height="166" Grid.RowSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" Grid.Column="1"/>
+            <Label x:Name="label3" Content="Progress:" HorizontalAlignment="Left" Margin="191,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.353,0.329" Height="26" Grid.Column="1" Width="58"/>
+            <TextBox x:Name="txtBox_Status" HorizontalAlignment="Left" Margin="191,190,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="344" Drop="txtBox_OutputDir_Drop" Height="166" Grid.RowSpan="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" Grid.Column="1"/>
 
-            <Button x:Name="startBtn" Content="Start" HorizontalAlignment="Left" Margin="22,198,0,0" VerticalAlignment="Top" Height="43" Width="258" Grid.Row="1" Click="startBtn_Click" Grid.ColumnSpan="2"/>
+            <Button x:Name="startBtn" Content="Start" HorizontalAlignment="Left" Margin="28,221,0,0" VerticalAlignment="Top" Height="43" Width="258" Grid.Row="1" Click="startBtn_Click" Grid.ColumnSpan="2"/>
 
         </Grid>
     </StackPanel>

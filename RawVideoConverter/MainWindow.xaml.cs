@@ -49,11 +49,11 @@ namespace RawVideoConverter
                     monthPicker.IsEnabled = false;
 
                 }
-
-                txtBox_InputDir.Text = previousSettings[1];
-                txtBox_OutputDir.Text = previousSettings[2];
+                txtBox_TargetExt.Text = previousSettings[1];
+                txtBox_InputDir.Text = previousSettings[2];
+                txtBox_OutputDir.Text = previousSettings[3];
                 //monthPicker.SelectedDate = DateTime.Parse(previousSettings[3]);
-                monthPicker.DisplayDate = DateTime.Parse(previousSettings[3]);
+                monthPicker.DisplayDate = DateTime.Parse(previousSettings[4]);
             }
             
            
@@ -69,7 +69,7 @@ namespace RawVideoConverter
         {
 
             //fool-proof
-            if(txtBox_InputDir.Text.Trim() == "" || txtBox_OutputDir.Text.Trim() == "")
+            if(txtBox_TargetExt.Text.Trim()=="" || txtBox_InputDir.Text.Trim() == "" || txtBox_OutputDir.Text.Trim() == "")
             {
                 MessageBox.Show("Fields cannot be left empty.");
                 return;
@@ -96,18 +96,18 @@ namespace RawVideoConverter
             }
 
             //Save settings to a file
-            string settings = $"{mode}\n{txtBox_InputDir.Text}\n{txtBox_OutputDir.Text}\n{monthPicker.DisplayDate.ToString()}";
+            string settings = $"{mode}\n{txtBox_TargetExt.Text}\n{txtBox_InputDir.Text}\n{txtBox_OutputDir.Text}\n{monthPicker.DisplayDate.ToString()}";
             FileIO.outputStringsToFile("previousSettings.txt", settings);
 
 
             //Create an object of converter and apply user's input info
-            converterObj = new Converter(this , mode, monthPicker.DisplayDate, txtBox_InputDir.Text, txtBox_OutputDir.Text, radBtn_Manual_Val, radBtn_Auto_Val);
+            converterObj = new Converter(this , mode, txtBox_TargetExt.Text,monthPicker.DisplayDate, txtBox_InputDir.Text, txtBox_OutputDir.Text, radBtn_Manual_Val, radBtn_Auto_Val);
 
             //Start converting
             try
             {
                 converterObj.start();
-                ;
+                
             }
             catch(Exception ex)
             {

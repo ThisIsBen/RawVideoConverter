@@ -13,10 +13,11 @@ namespace RawVideoConverter
     {
 
         //Constructor
-        public Converter(MainWindow argMainWindow,string argMode,DateTime argMonth,string argRootDir, string argOutputDir,string argManual_Val, string argAuto_Val)
+        public Converter(MainWindow argMainWindow,string argMode,string argTargetExt,DateTime argMonth,string argRootDir, string argOutputDir,string argManual_Val, string argAuto_Val)
         {
             mainWindow = argMainWindow;
             mode = argMode;
+            targetExt = argTargetExt;
             pickedDate = argMonth;
             rootDir = argRootDir;
             outputDir = argOutputDir;
@@ -31,6 +32,9 @@ namespace RawVideoConverter
 
         //Manual Mode or Auto Mode
         private string mode;
+
+        //The target files' extension
+        private string targetExt;
 
         //Selected month for Manual mode
         private DateTime pickedDate; 
@@ -83,7 +87,7 @@ namespace RawVideoConverter
             foreach (string subDir in firstLevelSubDirs)
             {
                 //Get all .raw videos' path created in the selected month
-                string[] rawVideosInSubDir = Directory.GetFiles(subDir, "*.raw");
+                string[] rawVideosInSubDir = Directory.GetFiles(subDir, $"*.{targetExt}");
                 foreach (string rawVideo in rawVideosInSubDir)
                 {
                     //Real version
@@ -158,7 +162,7 @@ namespace RawVideoConverter
             
             watcher.Error += OnError;
 
-            watcher.Filter = "*.raw";
+            watcher.Filter = $"*.{targetExt}";
             watcher.IncludeSubdirectories = true;
             watcher.EnableRaisingEvents = true;
 
@@ -223,7 +227,8 @@ namespace RawVideoConverter
                 //string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.mp4";
 
                 //For copy .raw to the new folder structure
-                string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.raw";
+                string ext = Path.GetExtension(inputVideoPath);
+                string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.{ext}";
 
 
 

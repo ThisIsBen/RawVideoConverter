@@ -243,9 +243,7 @@ namespace RawVideoConverter
                 //ffMpeg.ConvertMedia($"C:\\Users\\Public\\input.raw", $"C:\\Users\\Public\\{outPutVideoName}.mp4", "mp4");
                 //ffMpeg.ConvertMedia(newOutputDir, $"{outPutVideoName}.mp4", "mp4");
 
-                //Display progress status
-                msg = $"Complete\n Waiting for the next raw video to come...\n";
-                mainWindow.logging(msg);
+                
             }
             catch (Exception ex)
             {
@@ -262,10 +260,14 @@ namespace RawVideoConverter
         //Run the ffmpeg exe from C# to convert raw video to mp4
         private static void runConversionCommand(string inputVideoPath, string outputVideoPath)
         {
-            //If there is already a corresponding mp4 video in the output folder, delete it.
+            //If there is already a corresponding mp4 video in the output folder,
+            //skip the process for this video.
             if (File.Exists(outputVideoPath))
             {
-                File.Delete(outputVideoPath);
+                //Display progress status
+                string msg = $"Skipped\n Already exists in the output folder.\n Waiting for the next raw video to come...\n";
+                mainWindow.logging(msg);
+                return;
             }
 
             //For real execution
@@ -293,6 +295,10 @@ namespace RawVideoConverter
                 // and only then read the result
                 string result = process.StandardOutput.ReadToEnd();
                 Console.WriteLine(result);
+
+                //Display progress status
+                string msg = $"Complete\n Waiting for the next raw video to come...\n";
+                mainWindow.logging(msg);
             }
         }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -82,25 +83,35 @@ namespace RawVideoConverter
 
 
             // Get all first level subdirectories
-            string[] firstLevelSubDirs = Directory.GetDirectories(rootDir);
+            //string[] firstLevelSubDirs = Directory.GetDirectories(rootDir);
             //For each channel folder,
-            foreach (string subDir in firstLevelSubDirs)
-            {
+            //foreach (string subDir in firstLevelSubDirs)
+            //{
                 //Get all .raw videos' path created in the selected month
-                string[] rawVideosInSubDir = Directory.GetFiles(subDir, $"*.{targetExt}");
-                foreach (string rawVideo in rawVideosInSubDir)
+                //string[] rawVideosInSubDir = Directory.GetFiles(subDir, $"*.{targetExt}");
+                
+                //Get all .raw videos' path created in the selected month in the current folder
+                string[] videosInSubDir = Directory.GetFiles(rootDir, $"*.{targetExt}");
+                
+                foreach (string videoPath in videosInSubDir)
                 {
                     //Real version
-                    //DateTime modification_Date = File.GetLastWriteTime(rawVideo);
+                    //DateTime video_Date = File.GetLastWriteTime(rawVideo);
                     //For local test
-                    DateTime modification_Date = File.GetCreationTime(rawVideo);
-                    if (pickedDate.Year== modification_Date.Year && pickedDate.Month==modification_Date.Month)
+                    //DateTime video_Date = File.GetCreationTime(rawVideo);
+                    //string channelName = Path.GetFileName(subDir);
+
+                    //Get Info from video file name
+                    (string channelName, DateTime video_Date) = getInfoFromVideoName(videoPath);
+                    
+                    if (pickedDate.Year== video_Date.Year && pickedDate.Month== video_Date.Month)
                     {
-                        RawVideoItem item = new RawVideoItem(rawVideo, Path.GetFileName(subDir),modification_Date);
+                        //RawVideoItem item = new RawVideoItem(rawVideo, Path.GetFileName(subDir), video_Date);
+                        RawVideoItem item = new RawVideoItem(videoPath, channelName, video_Date);
                         rawVideo_List.Add(item);
                     }
                 }
-            }
+            //}
 
 
 
@@ -109,7 +120,7 @@ namespace RawVideoConverter
             for(int i=0; i< rawVideo_List.Count;i++)
             {
                 
-                await Task.Run(() => convert2MP4(rawVideo_List[i].modification_Date, rawVideo_List[i].parentDirName, rawVideo_List[i].path,outputDir));
+                await Task.Run(() => convert2MP4(rawVideo_List[i].video_Date, rawVideo_List[i].channelName, rawVideo_List[i].path,outputDir));
                 
                 
 
@@ -163,7 +174,8 @@ namespace RawVideoConverter
             watcher.Error += OnError;
 
             watcher.Filter = $"*.{targetExt}";
-            watcher.IncludeSubdirectories = true;
+            //watcher.IncludeSubdirectories = true;
+            watcher.IncludeSubdirectories = false;
             watcher.EnableRaisingEvents = true;
 
             
@@ -210,8 +222,22 @@ namespace RawVideoConverter
         }
 
 
+
+        //Get Info from video file name
+        public static (string, DateTime) getInfoFromVideoName(string videoPath)
+        {
+            string[] videoName_Parts = Path.GetFileName(videoPath).Split("_");
+            string channelName = videoName_Parts[0];
+            string video_Date_str = videoName_Parts[1];
+            DateTime video_Date = DateTime.ParseExact(video_Date_str, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            return (channelName, video_Date);
+        }
+
+
+
+
         //Convert a .raw video to a .mp4 and copy it to the destination folder
-        public static void convert2MP4(DateTime modification_Date,string parentDirName,string inputVideoPath,string outputDir)
+        public static void convert2MP4(DateTime video_Date,string channelName,string inputVideoPath,string outputDir)
         {
             try
             {
@@ -219,31 +245,38 @@ namespace RawVideoConverter
             
                 //Get .raw modified date
                 //Create the corresponding output folder for it 
-                string outPutVideoDir = $"{outputDir}\\{modification_Date.Year}\\{modification_Date.Month}\\{parentDirName}\\{modification_Date.Day}";
+                string outPutVideoDir = $"{outputDir}\\{video_Date.Year}\\{video_Date.Month}\\{channelName}\\{video_Date.Day}";
                 Directory.CreateDirectory(outPutVideoDir);
 
-                //For real execution
+                //For video format conversion
                 //The video name after conversion
-                //string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.mp4";
+                //string outputVideoName = $"{channelName}_{video_Date.ToString("yyyy_MM_dd_HH")}.mp4";
 
-                //For copy .raw to the new folder structure
-                string ext = Path.GetExtension(inputVideoPath);
-                string outPutVideoName = $"{parentDirName}_{modification_Date.ToString("yyyy_MM_dd_HH")}.{ext}";
+                //For copy the video to the new folder structure
+                //string ext = Path.GetExtension(inputVideoPath);
+                //string outputVideoName = $"{channelName}_{video_Date.ToString("yyyy_MM_dd_HH")}.{ext}";
+                string videoName = Path.GetFileName(inputVideoPath);
+                string outputVideoName = $"{videoName}";
 
 
 
                 //Convert the .raw video to .mp4 and copy it to the output path
-                string outputVideoPath = $"{outPutVideoDir}\\{outPutVideoName}";
+                string outputVideoPath = $"{outPutVideoDir}\\{outputVideoName}";
 
                 //Display progress status
-                string msg = $"Converting {Path.GetFileName(Path.GetDirectoryName(inputVideoPath))}\\{Path.GetFileName(inputVideoPath)}\n to {outPutVideoName}";
+                
+                //Get short outputVideoDir for display.e.g.,2024/7/Channel15/13
+                int startIndex = outputDir.Length+1;
+                string short_outputVideoDir = outPutVideoDir.Substring(startIndex);
+
+                string msg = $"#Converting {Path.GetFileName(Path.GetDirectoryName(inputVideoPath))}\\{Path.GetFileName(inputVideoPath)} to {short_outputVideoDir}";
                 mainWindow.logging(msg);
 
                 runConversionCommand( inputVideoPath,  outputVideoPath);
                 //ffMpeg.ConvertMedia($"C:\\Users\\Public\\input.raw", $"C:\\Users\\Public\\{outPutVideoName}.mp4", "mp4");
-                //ffMpeg.ConvertMedia(newOutputDir, $"{outPutVideoName}.mp4", "mp4");
+                //ffMpeg.ConvertMedia(newOutputDir, $"{outputVideoName}.mp4", "mp4");
 
-                
+
             }
             catch (Exception ex)
             {
@@ -252,7 +285,7 @@ namespace RawVideoConverter
             finally
             {
                 //Remove the handled file name from the hashset
-                OnChangedFile_Set.Remove($"{parentDirName}\\{Path.GetFileName(inputVideoPath)}");
+                OnChangedFile_Set.Remove($"{channelName}\\{Path.GetFileName(inputVideoPath)}");
             }
         }
 
@@ -265,7 +298,7 @@ namespace RawVideoConverter
             if (File.Exists(outputVideoPath))
             {
                 //Display progress status
-                string msg = $"Skipped\n Already exists in the output folder.\n Waiting for the next raw video to come...\n";
+                string msg = $"#Result:  Skipped\n Already exists in the output folder.\n Ready to process next video...\n";
                 mainWindow.logging(msg);
                 return;
             }
@@ -297,7 +330,7 @@ namespace RawVideoConverter
                 Console.WriteLine(result);
 
                 //Display progress status
-                string msg = $"Complete\n Waiting for the next raw video to come...\n";
+                string msg = $"#Result:  Completed\n Ready to process next video...\n";
                 mainWindow.logging(msg);
             }
         }

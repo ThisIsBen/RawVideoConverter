@@ -79,15 +79,20 @@ namespace RawVideoConverter
                
                 while (await _reader.WaitToReadAsync()) //ここでChannel内に内容が追加されるのを待っている
                 {
-                    string channelItem = "";
+                    string videoPath = "";
 
                     //Consume the data in the queue
-                    if (_reader.TryRead(out channelItem))
+                    if (_reader.TryRead(out videoPath))
                     {
 
                         //Process the data received from the queue---------------
-                       
-                        Converter.convert2MP4(File.GetLastWriteTime(channelItem),Path.GetFileName( Path.GetDirectoryName(channelItem)), channelItem, outputDir);
+
+
+                        //Get Info from video file name
+                        (string channelName, DateTime video_Date) = Converter.getInfoFromVideoName(videoPath);
+
+                        //start converting
+                        Converter.convert2MP4(video_Date, channelName, videoPath, outputDir);
 
                           
                         

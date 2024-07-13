@@ -12,18 +12,18 @@ namespace RawVideoConverter
         //raw video path
         public string path { set; get; }
 
-        //The folder that contains the raw video
-        public string parentDirName { set; get; }
+        //The channel that the raw video belongs to
+        public string channelName { set; get; }
 
         //raw video modification date
-        public  DateTime modification_Date { set; get; }
+        public  DateTime video_Date { set; get; }
 
         //Constructor
-        public RawVideoItem(string argPath, string argParentDirName, DateTime argModification_Date)
+        public RawVideoItem(string argPath, string argChannelName, DateTime argVideo_Date)
         {
             path = argPath;
-            parentDirName = argParentDirName;
-            modification_Date = argModification_Date;
+            channelName = argChannelName;
+            video_Date = argVideo_Date;
 
         }
 

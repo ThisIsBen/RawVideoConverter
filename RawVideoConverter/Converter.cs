@@ -90,15 +90,17 @@ namespace RawVideoConverter
                 //Get all .raw videos' path created in the selected month
                 //string[] rawVideosInSubDir = Directory.GetFiles(subDir, $"*.{targetExt}");
                 
-                //Get all .raw videos' path created in the selected month in the current folder
-                string[] videosInSubDir = Directory.GetFiles(rootDir, $"*.{targetExt}");
-                
-                foreach (string videoPath in videosInSubDir)
+
+
+                //Get all .raw videos' path created in the selected month in the current folder               
+                //Error occurs when there are 10K videos in the input folder.
+                        //string[] videosInSubDir = Directory.GetFiles(rootDir, $"*.{targetExt}");
+                        //foreach (string videoPath in videosInSubDir)
+                foreach (string videoPath in Directory.EnumerateFiles(rootDir, $"*.{targetExt}", SearchOption.AllDirectories))
                 {
-                    //Real version
+                    
+                    //Get last write time from file ingo
                     //DateTime video_Date = File.GetLastWriteTime(rawVideo);
-                    //For local test
-                    //DateTime video_Date = File.GetCreationTime(rawVideo);
                     //string channelName = Path.GetFileName(subDir);
 
                     //Get Info from video file name

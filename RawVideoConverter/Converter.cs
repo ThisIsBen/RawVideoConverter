@@ -65,6 +65,7 @@ namespace RawVideoConverter
             {
 
                 manualMode();
+               
             }
             //Auto mode
             else if (mode == Auto_Val)
@@ -134,6 +135,7 @@ namespace RawVideoConverter
 
             //The conversion has finished, so we enable the start button
             mainWindow.EnableStartBtn();
+            mainWindow.logging($"All processing finished.\n");
 
         }
 

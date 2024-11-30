@@ -158,7 +158,7 @@ namespace RawVideoConverter
             //Create channel object
             channelObj = new ChannelProvider();
             //Start N consumers
-            int consumerCount = 2;
+            int consumerCount = 4;
             channelObj.startConsumers(outputDir, consumerCount);
             //Start 1 producer
             producerObj = new ChannelProvider.Producer(channelObj.getWriter());
@@ -230,8 +230,14 @@ namespace RawVideoConverter
         //Get Info from video file name
         public static (string, DateTime) getInfoFromVideoName(string videoPath)
         {
+           
             string[] videoName_Parts = Path.GetFileName(videoPath).Split("_");
             string channelName = videoName_Parts[0];
+            //Eliminate "channel"substring(common part) from channelName
+            //For example, "channel01" will be "01"
+            int found = channelName.IndexOf(GlobalConstants.channelName_commonPart);
+            channelName = channelName.Substring(found + GlobalConstants.channelName_commonPart.Length);
+            
             string video_Date_str = videoName_Parts[1];
             DateTime video_Date = DateTime.ParseExact(video_Date_str, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             return (channelName, video_Date);
@@ -245,11 +251,11 @@ namespace RawVideoConverter
         {
             try
             {
-
+                
             
                 //Get .raw modified date
                 //Create the corresponding output folder for it 
-                string outPutVideoDir = $"{outputDir}\\{video_Date.Year}\\{video_Date.Month}\\{channelName}\\{video_Date.Day}";
+                string outPutVideoDir = $"{outputDir}\\{GlobalConstants.companyName}{video_Date.Year}\\{video_Date.Month}\\{channelName}\\{video_Date.ToString("yyyy-MM-dd")}";
                 Directory.CreateDirectory(outPutVideoDir);
 
                 //For video format conversion

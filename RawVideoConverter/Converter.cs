@@ -234,8 +234,8 @@ namespace RawVideoConverter
             string[] videoName_Parts = Path.GetFileName(videoPath).Split("_");
             string channelName = videoName_Parts[0];
             //Eliminate "channel"substring(common part) from channelName
-            //For example, "channel01" will be "01"
-            int found = channelName.IndexOf(GlobalConstants.channelName_commonPart);
+            //For example, "channel01" or "Channel01" or "ChanNel01" ...will be "01"
+            int found = channelName.ToUpper().IndexOf(GlobalConstants.channelName_commonPart.ToUpper());
             channelName = channelName.Substring(found + GlobalConstants.channelName_commonPart.Length);
             
             string video_Date_str = videoName_Parts[1];

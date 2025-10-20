@@ -91,12 +91,18 @@ namespace RawVideoConverter
                         //Get Info from video file name
                         (string channelName, DateTime video_Date) = Converter.getInfoFromVideoName(videoPath);
 
-                        //start converting
-                        Converter.convert2MP4(video_Date, channelName, videoPath, outputDir);
+                        //Only process the video
+                        //when it successfully got Info from video file name
+                        if (channelName!="")
+                        {
+                            //start converting
+                            Converter.convert2MP4(video_Date, channelName, videoPath, outputDir);
 
-                          
-                        
-                       
+                        }
+
+
+
+
 
                         //Process the data received from the queue---------------
                     }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RawVideoConverter
 {
@@ -107,11 +108,16 @@ namespace RawVideoConverter
                     //Get Info from video file name
                     (string channelName, DateTime video_Date) = getInfoFromVideoName(videoPath);
                     
-                    if (pickedDate.Year== video_Date.Year && pickedDate.Month== video_Date.Month)
+                    //Only process the video
+                    //when it successfully got Info from video file name
+                    if (channelName != "")
                     {
-                        //RawVideoItem item = new RawVideoItem(rawVideo, Path.GetFileName(subDir), video_Date);
-                        RawVideoItem item = new RawVideoItem(videoPath, channelName, video_Date);
-                        rawVideo_List.Add(item);
+                        if (pickedDate.Year == video_Date.Year && pickedDate.Month == video_Date.Month)
+                        {
+                            //RawVideoItem item = new RawVideoItem(rawVideo, Path.GetFileName(subDir), video_Date);
+                            RawVideoItem item = new RawVideoItem(videoPath, channelName, video_Date);
+                            rawVideo_List.Add(item);
+                        }
                     }
                 }
             //}
@@ -228,19 +234,29 @@ namespace RawVideoConverter
 
 
         //Get Info from video file name
+        //The video file name is in this format: e.g.,Channel15_20240714223133_UTC+0800.raw
         public static (string, DateTime) getInfoFromVideoName(string videoPath)
         {
-           
-            string[] videoName_Parts = Path.GetFileName(videoPath).Split("_");
-            string channelName = videoName_Parts[0];
-            //Eliminate "channel"substring(common part) from channelName
-            //For example, "channel01" or "Channel01" or "ChanNel01" ...will be "01"
-            int found = channelName.ToUpper().IndexOf(GlobalConstants.channelName_commonPart.ToUpper());
-            channelName = channelName.Substring(found + GlobalConstants.channelName_commonPart.Length);
+            try
+            {
+                string[] videoName_Parts = Path.GetFileName(videoPath).Split("_");
+                string channelName = videoName_Parts[0];
+                //Eliminate "channel"substring(common part) from channelName
+                //For example, "channel01" or "Channel01" or "ChanNel01" ...will be "01"
+                int found = channelName.ToUpper().IndexOf(GlobalConstants.channelName_commonPart.ToUpper());
+                channelName = channelName.Substring(found + GlobalConstants.channelName_commonPart.Length);
+
+                string video_Date_str = videoName_Parts[1];
+                DateTime video_Date = DateTime.ParseExact(video_Date_str, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+                return (channelName, video_Date);
+            }
+            // return empty value if it failed to get the info from video file name
+            catch 
+            {
+                MessageBox.Show($"{videoPath}\n is skipped because the filename is wrong.\n It should be like Channel15_20240714223133_UTC+0800.raw.");
+                return ("", DateTime.Now);
+            }
             
-            string video_Date_str = videoName_Parts[1];
-            DateTime video_Date = DateTime.ParseExact(video_Date_str, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-            return (channelName, video_Date);
         }
 
 

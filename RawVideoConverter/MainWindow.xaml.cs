@@ -32,6 +32,14 @@ namespace RawVideoConverter
         //Init the UI
         private void InitUI()
         {
+            // Set the window title here
+            this.Title = $"VideoDirConverter      此程式為{GlobalConstants.fullCompanyName}所有，非經正式授權，請勿使用。";
+
+            // Set the window footer here
+            string footer = $"Copyright © {DateTime.Now.Year} {GlobalConstants.fullCompanyName}";
+            FooterText.Text = footer;
+
+
 
             //Load in previous settings from a file
             var previousSettings = FileIO.readAllLinesOfAFile("previousSettings.txt");

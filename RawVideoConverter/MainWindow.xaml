@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RawVideoConverter"
         mc:Ignorable="d"
-        Title="VideoDirConverter      此程式為宏昇營造股份有限公司所有，非經正式授權，請勿使用。" Height="553" Width="650">
+        Title="" Height="592" Width="650">
     <StackPanel Orientation="Vertical" Margin="10,0,23,-27">
         <Grid Height="503" Width="602">
             <Grid.ColumnDefinitions>
@@ -45,5 +45,10 @@
             <Button x:Name="startBtn" Content="Start" HorizontalAlignment="Left" Margin="28,221,0,0" VerticalAlignment="Top" Height="43" Width="258" Grid.Row="1" Click="startBtn_Click" Grid.ColumnSpan="2"/>
 
         </Grid>
+        <!-- Footer -->
+        <StatusBar DockPanel.Dock="Bottom" Name="FooterBar" Margin="0,20,0,5">
+            <TextBlock Name="FooterText" />
+        </StatusBar>
+
     </StackPanel>
 </Window>

@@ -13,5 +13,8 @@ namespace RawVideoConverter
 
         //company name
         public static string companyName = "宏昇";
+
+        //full company name
+        public static string fullCompanyName = "宏昇營造股份有限公司";
     }
 }
